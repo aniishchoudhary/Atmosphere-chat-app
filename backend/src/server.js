@@ -15,12 +15,18 @@ const PORT = process.env.PORT;
 
 const __dirname = path.resolve();
 
+const FRONTEND_ORIGINS = [
+  "http://localhost:5173",               // local dev
+  "https://your-frontend-render-url"    // replace with your Render frontend URL
+];
+
 app.use(
   cors({
-    origin: "http://localhost:5173",
-    credentials: true, // allow frontend to send cookies
+    origin: FRONTEND_ORIGINS,
+    credentials: true,
   })
 );
+
 
 app.use(express.json());
 app.use(cookieParser());
