@@ -17,7 +17,7 @@ const __dirname = path.resolve();
 
 const FRONTEND_ORIGINS = [
   "http://localhost:5173",               // local dev
-  "https://your-frontend-render-url"    // replace with your Render frontend URL
+  "https://atmosphere-chat-app-1.onrender.com"    // replace with your Render frontend URL
 ];
 
 app.use(
