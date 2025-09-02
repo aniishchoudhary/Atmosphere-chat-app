@@ -1,7 +1,7 @@
 import axios from "axios";
 
 // Replace this with your actual backend URL deployed on Render
-const BACKEND_URL = "https://atmosphere-chat-app-1.onrender.com";
+const BACKEND_URL = "https://atmosphere-chat-app.onrender.com";
 
 const BASE_URL =
   import.meta.env.MODE === "development"
