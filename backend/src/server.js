@@ -14,45 +14,36 @@ const app = express();
 const PORT = process.env.PORT || 5001;
 const __dirname = path.resolve();
 
-// FRONTEND ORIGINS
+// CORS configuration
 const FRONTEND_ORIGINS = [
-  "http://localhost:5173",               // local dev
-  "https://atmosphere-chat-app-1.onrender.com" // your Render frontend URL
+  "https://atmosphere-chat-app-1.onrender.com", // deployed frontend URL
+  "http://localhost:5173",                       // local dev
 ];
 
-// Middleware
-app.use(
-  cors({
-    origin: FRONTEND_ORIGINS,
-    credentials: true, // allow cookies
-  })
-);
+app.use(cors({
+  origin: FRONTEND_ORIGINS,
+  credentials: true, // allow cookies
+}));
 
 app.use(express.json());
 app.use(cookieParser());
 
-// 1️⃣ API routes
+// API routes
 app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/chat", chatRoutes);
 
-// 2️⃣ Serve frontend in production
+// Serve frontend in production
 if (process.env.NODE_ENV === "production") {
-  const frontendDist = path.join(__dirname, "../frontend/dist");
+  app.use(express.static(path.join(__dirname, "../frontend/dist")));
 
-  app.use(express.static(frontendDist));
-
-  // Serve index.html for any route NOT starting with /api
-  app.get(/^(?!\/api).*/, (req, res) => {
-    res.sendFile(path.join(frontendDist, "index.html"));
+  app.get("*", (req, res) => {
+    res.sendFile(path.join(__dirname, "../frontend/dist/index.html"));
   });
 }
 
-// Connect to DB & start server
-connectDB().then(() => {
-  app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
-  });
-}).catch(err => {
-  console.error("DB connection failed:", err);
+// Start server and connect DB
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+  connectDB();
 });
